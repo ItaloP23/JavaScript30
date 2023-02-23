@@ -39,27 +39,88 @@
     // Array.prototype.filter()
     // 1. Filter the list of inventors for those who were born in the 1500's
 
+    const bornIn1500 = inventors.filter(inventor=>(inventor.year<1600&&inventor.year>1499))
+    console.table(bornIn1500)
+
     // Array.prototype.map()
     // 2. Give us an array of the inventors first and last names
+    const inventorFirstLastName = inventors.map( inventor=> `${inventor.first} ${inventor.last}`);
+    console.table(inventorFirstLastName);
 
     // Array.prototype.sort()
     // 3. Sort the inventors by birthdate, oldest to youngest
+    console.table( inventors.sort((inventorX,inventorY)=>inventorX.year-inventorY.year ));
 
     // Array.prototype.reduce()
     // 4. How many years did all the inventors live all together?
+    const totalYearLived = inventors.reduce( (sum , inventor )=>{
+      return sum+inventor.passed-inventor.year
+    } ,0)
+    console.log(totalYearLived)
 
     // 5. Sort the inventors by years lived
+    function yearLived(person){
+      //console.log(`${person.first} lived ${person.passed-person.year} year`)
+      return person.passed-person.year
+    }
+    const inventorsByYearLived = inventors.sort((x,y)=>yearLived(y)-yearLived(x))
+    console.table(inventorsByYearLived)
 
     // 6. create a list of Boulevards in Paris that contain 'de' anywhere in the name
     // https://en.wikipedia.org/wiki/Category:Boulevards_in_Paris
+/*     const category = document.querySelector('.mw-category')
+    const links = category.querySelectorAll('a') //nodelist
 
+    //PRIMO METODO
+    const deBoulevards = []
+    links.forEach(element => {
+      if(/(de)/gi.test(element.innerText)) {
+        deBoulevards.push(element.innerText)
+        return
+    } 
+    return})
+    console.table(deBoulevards)
+
+    //SECONDO METODO
+    const linksArr = Array.from((category.querySelectorAll('a')))
+    const deBoulevards2 = linksArr
+                                  .map(link=>link.innerText)
+                                  .filter(link=>/(de)/gi.test(link))
+    console.table(deBoulevards2) */
 
     // 7. sort Exercise
     // Sort the people alphabetically by last name
+    //PRIMO METODO
+    console.table(people.sort())
+
+    //SECONDO METODO
+    const sortedByLast = people.sort((previous , next)=>{
+      const [previousLast , previousFirst] = previous.split(',')
+      const [nextLast , nextFirst] = next.split(',')
+
+      return previousLast>nextLast?1:-1
+    })
+
+    console.table(sortedByLast)
+
 
     // 8. Reduce Exercise
     // Sum up the instances of each of these
     const data = ['car', 'car', 'truck', 'truck', 'bike', 'walk', 'car', 'van', 'bike', 'walk', 'car', 'van', 'car', 'truck' ];
+    
+    const instances = data.reduce(function(persistent , name) {
+
+    if (!persistent[name]) { //if the object with that name does not exist, create it
+
+      persistent[name]=1;
+
+    } else persistent[name]+=1;
+
+    return persistent
+
+    } , {})
+
+    console.table(instances)
 
   </script>
 </body>
