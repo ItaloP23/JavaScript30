@@ -16,7 +16,72 @@
     </ul>
   </form>
 <script>
+  /*external source, ana array of objects like this:
+
+  [
+    {
+        "city": "New York", 
+        "growth_from_2000_to_2013": "4.8%", 
+        "latitude": 40.7127837, 
+        "longitude": -74.0059413, 
+        "population": "8405837", 
+        "rank": "1", 
+        "state": "New York"
+    }, ... ]
+
+  */
 const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
+
+// create an array to store all the objects
+let cities = [];
+
+// store objects into the array
+fetch(endpoint) //fetch the data from online
+.then(blob=>blob.json()) //convert the blob into json
+.then(data=>cities=data) //store the data into the array
+
+//function to search into the cities array and find the matches
+function findMatches( wordToSearch ) {
+  
+  //return the cities that match the wordToSearch
+  return cities.filter( place=> {
+
+    const regex = new RegExp( wordToSearch , 'gi' ) //a variable regular expression
+
+    return place.city.match(regex) || place.state.match(regex)
+  })
+}
+
+//display the matches
+function displayMatches() {
+  console.log(this.value); //to test, console log what you type
+  const match = findMatches(this.value); //the match, it is an array of objects that match the word
+  console.log(match); //to test, console log the matches
+
+  //this is the html to add to the suggestions element
+  const html = match.map( place => {
+    return `<li>
+              <span class='name'>${place.city}, ${place.state}</span>
+              <span class='population'>${place.population}</span>
+            </li>
+            `
+  })
+
+  console.log(html)
+
+  suggestions.innerHTML = html;
+
+
+}
+
+//select suggestion element
+const suggestions = document.querySelector('.suggestions');
+
+// select the input element and add event listener to it
+const input = document.querySelector('.search');
+input.addEventListener('change' , displayMatches); //change trigger when you click outside of the element
+input.addEventListener('keyup' , displayMatches); //keyup trigger always you press a button on the keyboard
+
 
 </script>
 </body>
